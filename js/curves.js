@@ -9,12 +9,7 @@ function parseDate(date) {
 }
 
 
-// var name = "";
-// var birthdate = null;
-// var gender = null;
-
-
-var data = "";
+var imgData = "";
 var imgWidth = 2480, imgHeight = 1748;
 
 var bl = [252, 1415];
@@ -35,33 +30,13 @@ var colorb = "#6D9505";
 var colorg = "#790463";
 
 
-function makeHighDpi(canvas, ctx) {
-    // var dpr = window.devicePixelRatio || 1;
-    // var bsr = ctx.webkitBackingStorePixelRatio ||
-    //           ctx.mozBackingStorePixelRatio ||
-    //           ctx.msBackingStorePixelRatio ||
-    //           ctx.oBackingStorePixelRatio ||
-    //           ctx.backingStorePixelRatio || 1;
-    // var pixelRatio = dpr / bsr;
-    // canvas.pixelRatio = pixelRatio;
-    // canvas.style.width  = canvas.width  + "px";
-    // canvas.style.height = canvas.height + "px";
-    canvas.width = imgWidth;
-    canvas.height = imgHeight;
-    // var pixelRatio = canvas.width / $(canvas).width();
-    // console.log(pixelRatio);
-    // canvas.width  *= pixelRatio;
-    // canvas.height *= pixelRatio;
-    // ctx.scale(pixelRatio, pixelRatio);
-}
-
-
 function Curves() {
     var canvas = document.getElementById("curves");
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
-        makeHighDpi(canvas, ctx);
+        canvas.width = imgWidth;
+        canvas.height = imgHeight;
 
         ctx.strokeStyle = colorb;
         ctx.fillStyle = colorb;
@@ -75,7 +50,6 @@ function Curves() {
 
     this.canvas = canvas;
     this.ctx = ctx;
-    // this.pixelRatio = canvas.pixelRatio;
 }
 
 
@@ -88,7 +62,7 @@ Curves.prototype.drawImage = function (url, callback) {
 
         if (callback !== undefined) {
             callback();
-            data = canvas.toDataURL();
+            imgData = canvas.toDataURL();
         }
     };
     img.src = url;
@@ -144,8 +118,7 @@ Curves.prototype.drawPath = function (path_orig) {
 
 function downloadCanvas() {
     var canvas = document.getElementById("curves");
-    // console.log(data.length);
-    download(data, "courbe.png", "image/png");
+    download(imgData, "courbe.png", "image/png");
 }
 
 
@@ -199,36 +172,39 @@ function setCookie (data) {
 
 function loadFromCookie () {
     var data = Cookies.getJSON('adikiaCurveData');
+    if (data) {
 
-    // console.log("Loading", data);
+        // console.log("Loading", data);
 
-    $("#formName").val(data.name);
-    $("#formBirthdate").val(data.birthdate);
-    $("#formGender" + data.gender).attr("checked", true);
+        $("#formName").val(data.name);
+        $("#formBirthdate").val(data.birthdate);
+        $("#formGender" + data.gender).attr("checked", true);
 
-    for (var i = 0; i < data.values.length; i++ ) {
-        appendRow(data.values[i][0], data.values[i][1]);
+        for (var i = 0; i < data.values.length; i++ ) {
+            appendRow(data.values[i][0], data.values[i][1]);
+        }
     }
+
     appendRow("", "");
 }
 
 
 function appendRow (date, value) {
     $("#table").append('<tr><td class="date"><input type="text" value="' + date +
-                       '" size="8" /></td><td class="value"><input type="text" value="' + value +
-                       '" size="2" /></td></tr>');
+                       '" placeholder="01/01/2018" size="8" /></td><td class="value"><input type="text" value="' + value +
+                       '" size="2" placeholder="42" /></td></tr>');
 }
 
 
 $(document).ready(function() {
     $("#table tbody tr").remove();
     loadFromCookie();
+    draw();
 
-    $("#table").on("change", function (evt, newValue) {
+    $("#form").change(function (e) {
         if ($("#table tr:last td.date input").val() != "") {
             appendRow("", "");
         }
         draw();
     });
-    draw();
 });

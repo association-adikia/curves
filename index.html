@@ -14,26 +14,44 @@
   <body>
 
     <div class="container-fluid">
+
         <div class="row">
             <div class="col">
-                <form id="form" onsubmit="return false;">
+                <h1>Courbe du périmètre crânien</h1>
+            </div>
+        </div>
 
-                    <div class="form-inline">
+        <form id="form" onsubmit="return false;">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group">
                         <input type="text" id="formName" name="name" placeholder="pr&eacute;nom" class="form-control" />
-                        <input type="text" id="formBirthdate" name="birthdate" placeholder="01/01/2018" size="12" class="form-control" />
+                    </div>
+                </div>
 
-                        <div class="form-check">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="formBirthdate" name="birthdate" placeholder="date de naissance (ex: 01/01/2018)" size="12" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-check form-check-inline">
                             <input type="radio" id="formGenderM" name="gender" value="M" id="genderM" checked class="form-check-input" />
                             <label for="genderM" class="form-check-label">gar&ccedil;on</label>
+                        </div>
 
+                        <div class="form-check form-check-inline">
                             <input type="radio" id="formGenderF" name="gender" value="F" id="genderF" class="form-check-input" />
                             <label for="genderF" class="form-check-label">fille</label>
                         </div>
-
                     </div>
-                </form>
+                </div>
+
             </div>
-        </div>
+        </form>
 
         <div class="row">
             <div class="col-md-3">
@@ -42,31 +60,17 @@
                     <thead>
                         <tr>
                             <th>date</th>
-                            <th>PC (cm)</th>
+                            <th>PC&nbsp;(cm)</th>
                         </tr>
                     </thead>
                     <tbody>
-<!--                         <tr>
-                            <td class="date">
-                                <input type="text" placeholder="01/01/2018" size="8" /></td>
-                            <td class="value">
-                                <input type="text" placeholder="35" size="2" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="date">
-                                <input type="text" value="" size="8" /></td>
-                            <td class="value">
-                                <input type="text" value="" size="2" />
-                            </td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
 
-            <div class="col">
-                <div style="width: 100%; padding-bottom: 70.48%; position: relative;">
-                <canvas id="curves" style="width: 100%; height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></canvas>
+            <div class="col-md-9">
+                <div id="curves-container">
+                    <canvas id="curves"></canvas>
                 </div>
                 <button onclick="downloadCanvas()">Download</button>
             </div>
