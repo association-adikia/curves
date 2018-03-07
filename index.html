@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <title>Courbe du périmètre crânien</title>
+  </head>
+  <body>
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col">
+                <h1>Courbe du périmètre crânien</h1>
+            </div>
+        </div>
+
+        <form id="form" onsubmit="return false;">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="formName" name="name" placeholder="pr&eacute;nom" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" id="formBirthdate" name="birthdate" placeholder="date de naissance (ex: 01/01/2018)" size="12" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="formGenderM" name="gender" value="M" id="genderM" checked class="form-check-input" />
+                            <label for="genderM" class="form-check-label">gar&ccedil;on</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input type="radio" id="formGenderF" name="gender" value="F" id="genderF" class="form-check-input" />
+                            <label for="genderF" class="form-check-label">fille</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+
+                    <table id="table" class="table">
+                        <thead>
+                            <tr>
+                                <th>date</th>
+                                <th>PC&nbsp;(cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <button type="button" class="btn btn-primary btn-block" onclick="downloadCanvas()">Télécharger</button>
+                </div>
+
+                <div class="col-md-9">
+                    <div id="curves-container">
+                        <canvas id="curves"></canvas>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/editabletable.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/curves.js"></script>
+
+</body>
+</html>
