@@ -190,8 +190,8 @@ function loadFromCookie () {
 
 
 function appendRow (date, value) {
-    $("#table").append('<tr><td class="date"><input type="text" value="' + date +
-                       '" placeholder="01/01/2018" size="8" /></td><td class="value"><input type="text" value="' + value +
+    $("#table").append('<tr><td class="date"><input type="text" class="form-control" value="' + date +
+                       '" placeholder="01/01/2018" size="8" /></td><td class="value"><input type="text" class="form-control" value="' + value +
                        '" size="2" placeholder="42" /></td></tr>');
 }
 
@@ -202,7 +202,7 @@ $(document).ready(function() {
     draw();
 
     $("#form").change(function (e) {
-        if ($("#table tr:last td.date input").val() != "") {
+        if ($("#table tbody tr:last td.date input").val() != "") {
             appendRow("", "");
         }
         draw();

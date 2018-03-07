@@ -49,32 +49,32 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="row">
+                <div class="col-md-3">
+
+                    <table id="table" class="table">
+                        <thead>
+                            <tr>
+                                <th>date</th>
+                                <th>PC&nbsp;(cm)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <button type="button" class="btn btn-primary btn-block" onclick="downloadCanvas()">Télécharger</button>
+                </div>
+
+                <div class="col-md-9">
+                    <div id="curves-container">
+                        <canvas id="curves"></canvas>
+                    </div>
+                </div>
             </div>
         </form>
-
-        <div class="row">
-            <div class="col-md-3">
-
-                <table id="table" class="table">
-                    <thead>
-                        <tr>
-                            <th>date</th>
-                            <th>PC&nbsp;(cm)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="col-md-9">
-                <div id="curves-container">
-                    <canvas id="curves"></canvas>
-                </div>
-                <button onclick="downloadCanvas()">Download</button>
-            </div>
-
     </div>
 
 
