@@ -26,8 +26,8 @@ function sizeToY(size) {
 }
 
 
-var colorb = "#6D9505";
-var colorg = "#790463";
+var colorb = "#7f9497";
+var colorg = "#7e4674";
 
 
 function Curves() {
@@ -43,7 +43,7 @@ function Curves() {
         ctx.lineWidth = 5;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
-        ctx.font = "56px sans-serif";
+        ctx.font = "56px 'Roboto Condensed'";
         ctx.textAlign = "center";
 
     }

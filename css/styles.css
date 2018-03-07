@@ -1,5 +1,13 @@
 body {
-    margin: 12px;
+    margin: 12px 0;
+}
+
+* {
+    font-family: "Roboto Condensed";
+}
+
+.form-check.form-check-inline {
+    margin-top: 6px;
 }
 
 #curves-container {
@@ -17,7 +25,8 @@ input::placeholder {
     color: #fff;
 }
 
-#table {
+#table th {
+    text-transform: uppercase;
 }
 
 #table tbody tr {
@@ -53,4 +62,18 @@ input::placeholder {
 
 #form input[type=text]::placeholder {
     color: #cdcdcd;
+}
+
+#form button {
+    background-color: #7f9497;
+    border-color: #7f9497;
+    color: #fff;
+    border-width: 2px;
+    text-transform: uppercase;
+    font-weight: normal;
+}
+
+#form button:hover {
+    background-color: #fff;
+    color: #7f9497;
 }
