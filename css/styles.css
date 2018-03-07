@@ -1,0 +1,38 @@
+#curves {
+}
+
+#table {
+}
+
+#table tbody tr {
+    /*height: 60px;*/
+    padding: 0;
+    margin: 0;
+}
+
+#table tbody tr:nth-child(even) {
+    /*background: #eee;*/
+}
+
+#table tbody tr * {
+    cursor: pointer;
+}
+
+#table tbody td, #table tr {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+#table tbody td input[type=text] {
+    padding: 12px;
+    margin: 0;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+}
+
+#table tbody td input[type=text]:focus {
+    background: #eee;
+}

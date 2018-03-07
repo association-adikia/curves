@@ -1,271 +1,87 @@
-<html>
-<head>
- <meta charset="UTF-8">
-<title>Courbes</title>
-<script src="jquery-3.3.1.min.js"></script>
-<script src="download.js"></script>
-<script src="editabletable.js"></script>
-<script src="moment-with-locales.js"></script>
-<script>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-function ageMonths(date, birthDate) {
-    return moment.duration(date.diff(birthDate, "months", true)) / 1;
-}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 
+    <title>Courbe du périmètre crânien</title>
+  </head>
+  <body>
 
-function parseDate(date) {
-    return moment(date, "DD/MM/YYYY");
-}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <form id="form" onsubmit="return false;">
 
+                    <div class="form-inline">
+                        <input type="text" id="formName" name="name" placeholder="pr&eacute;nom" class="form-control" />
+                        <input type="text" id="formBirthdate" name="birthdate" placeholder="01/01/2018" size="12" class="form-control" />
 
-// var name = "";
-// var birthdate = null;
-// var gender = null;
+                        <div class="form-check">
+                            <input type="radio" id="formGenderM" name="gender" value="M" id="genderM" checked class="form-check-input" />
+                            <label for="genderM" class="form-check-label">gar&ccedil;on</label>
 
+                            <input type="radio" id="formGenderF" name="gender" value="F" id="genderF" class="form-check-input" />
+                            <label for="genderF" class="form-check-label">fille</label>
+                        </div>
 
-var data = "";
-var imgWidth = 2480, imgHeight = 1748;
+                    </div>
+                </form>
+            </div>
+        </div>
 
-var bl = [252, 1415];
-var tr = [2085, 203];
+        <div class="row">
+            <div class="col-md-3">
 
+                <table id="table" class="table">
+                    <thead>
+                        <tr>
+                            <th>date</th>
+                            <th>PC (cm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+<!--                         <tr>
+                            <td class="date">
+                                <input type="text" placeholder="01/01/2018" size="8" /></td>
+                            <td class="value">
+                                <input type="text" placeholder="35" size="2" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="date">
+                                <input type="text" value="" size="8" /></td>
+                            <td class="value">
+                                <input type="text" value="" size="2" />
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
 
-function monthToX(month) {
-    return bl[0] + (tr[0] - bl[0]) * (month / 60) + 2;
-}
+            <div class="col">
+                <div style="width: 100%; padding-bottom: 70.48%; position: relative;">
+                <canvas id="curves" style="width: 100%; height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></canvas>
+                </div>
+                <button onclick="downloadCanvas()">Download</button>
+            </div>
 
-
-function sizeToY(size) {
-    return bl[1] + (tr[1] - bl[1]) * ((size - 30) / 30) + 2;
-}
-
-
-var colorb = "#6D9505";
-var colorg = "#790463";
-
-
-function makeHighDpi(canvas, ctx) {
-    // var dpr = window.devicePixelRatio || 1;
-    // var bsr = ctx.webkitBackingStorePixelRatio ||
-    //           ctx.mozBackingStorePixelRatio ||
-    //           ctx.msBackingStorePixelRatio ||
-    //           ctx.oBackingStorePixelRatio ||
-    //           ctx.backingStorePixelRatio || 1;
-    // var pixelRatio = dpr / bsr;
-    // canvas.pixelRatio = pixelRatio;
-    // canvas.style.width  = canvas.width  + "px";
-    // canvas.style.height = canvas.height + "px";
-    canvas.width = imgWidth;
-    canvas.height = imgHeight;
-    var pixelRatio = canvas.width / $(canvas).width();
-    console.log(pixelRatio);
-    // canvas.width  *= pixelRatio;
-    // canvas.height *= pixelRatio;
-    // ctx.scale(pixelRatio, pixelRatio);
-}
-
-
-function Curves() {
-    var canvas = document.getElementById("curves");
-
-    if (canvas.getContext) {
-        var ctx = canvas.getContext('2d');
-        makeHighDpi(canvas, ctx);
-
-        ctx.strokeStyle = colorb;
-        ctx.fillStyle = colorb;
-        ctx.lineWidth = 5;
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.font = "56px sans-serif";
-        ctx.textAlign = "center";
-
-    }
-
-    this.canvas = canvas;
-    this.ctx = ctx;
-    // this.pixelRatio = canvas.pixelRatio;
-}
+    </div>
 
 
-Curves.prototype.drawImage = function (url, callback) {
-    var img = new Image();
-    var that = this;
-    img.onload = function() {
-        var canvas = that.canvas;
-        that.ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        if (callback !== undefined) {
-            callback();
-            data = canvas.toDataURL();
-        }
-    };
-    img.src = url;
-};
-
-
-Curves.prototype.drawText = function (text) {
-    var coords = this._rescale(imgWidth / 2, 100);
-    this.ctx.fillText(text, coords[0], coords[1]);
-};
-
-
-Curves.prototype._rescale = function (x, y) {
-    var x2 = (x / imgWidth) * this.canvas.width;
-    var y2 = (y / imgHeight) * this.canvas.height;
-    return [x2, y2];
-};
-
-
-Curves.prototype.drawPath = function (path_orig) {
-    var ctx = this.ctx;
-
-    var path = [];
-    for (var i = 0; i < path_orig.length; i ++) {
-        var coords = path_orig[i];
-        var x = coords[0], y = coords[1];
-        var coords = this._rescale(x, y);
-        if (coords[0] > 0 && coords[1] > 0) {
-            path.push(coords);
-        }
-    }
-
-    // Path.
-    ctx.beginPath();
-    for (var i = 0; i < path.length; i ++) {
-        var coords = path[i];
-        ctx.lineTo(coords[0], coords[1]);
-    }
-    ctx.stroke();
-    ctx.closePath();
-
-    // Discs.
-    for (var i = 0; i < path.length; i ++) {
-        var coords = path[i];
-        ctx.beginPath();
-        ctx.arc(coords[0], coords[1], 10, 0, 2 * Math.PI, false);
-        ctx.fill();
-        ctx.closePath();
-    }
-
-}
-
-
-function downloadCanvas() {
-    var canvas = document.getElementById("curves");
-    console.log(data.length);
-    download(data, "courbe.png", "image/png");
-}
-
-
-function getValues() {
-    var name = $("#formName").val();
-    var birthdate = parseDate($("#formBirthdate").val());
-    var gender = $("#form input[type='radio']:checked").val();
-
-    var values = [];
-    $("#table tbody tr").each(function () {
-        var date = parseDate($(this).find(".date").html());
-        var value = parseFloat($(this).find(".value").html());
-        var age = ageMonths(date, birthdate);
-        values.push([age, value]);
-    });
-
-    return {"name": name, "birthdate": birthdate, "gender": gender, "values": values};
-}
-
-
-function draw () {
-    var curves = new Curves();
-    var data = getValues();
-    var ageNow = ageMonths(moment(), data.birthdate);
-    var url = "hc" + data.gender + ".png";
-
-    curves.drawImage(url, function () {
-        var coords = [];
-        for (var i = 0; i < data.values.length; i++) {
-            var age = data.values[i][0];
-            var value = data.values[i][1];
-            coords.push([monthToX(age), sizeToY(value)]);
-        }
-        curves.drawPath(coords);
-        curves.drawText("Courbe de " + data.name + ", " + ageNow.toFixed(0) + " mois", [400, 50]);
-    });
-}
-
-
-$(document).ready(function() {
-    $("#table").editableTableWidget();
-
-    $("#table").on("change", function (evt, newValue) {
-        if ($("#table tr:last td:empty").length < 2) {
-            $("#table").append('<tr><td class="date" tabindex="1"></td><td class="value" tabindex="2"></td></tr>');
-        }
-        draw();
-    });
-    draw();
-});
-
-
-</script>
-<style>
-#curves {
-    border: 1px solid black;
-}
-
-#table tbody tr {
-    height: 30px;
-}
-
-#table tbody td {
-    border: 1px solid black;
-}
-</style>
-</head>
-<body>
-
-
-<form id="form" onsubmit="return false;">
-    <input type="text" id="formName" name="name" placeholder="pr&eacute;nom" />
-    <input type="text" id="formBirthdate" name="birthdate" placeholder="01/01/2018" size="12" />
-    <input type="radio" id="formGenderM" name="gender" value="M" id="genderM" checked />
-    <label for="genderM">gar&ccedil;on</label>
-    <input type="radio" id="formGenderF" name="gender" value="F" id="genderF" />
-    <label for="genderF">fille</label>
-</form>
-
-
-<table id="table">
-    <thead>
-        <tr>
-            <th>date</th>
-            <th>PC (cm)</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="date">05/11/2015</td>
-            <td class="value">36</td>
-        </tr>
-        <tr>
-            <td class="date">05/12/2015</td>
-            <td class="value">38</td>
-        </tr>
-        <tr>
-            <td class="date">05/04/2016</td>
-            <td class="value">46</td>
-        </tr>
-        <tr>
-            <td class="date"></td>
-            <td class="value"></td>
-        </tr>
-    </tbody>
-</table>
-
-<div style="width: 100%; padding-bottom: 70.48%; position: relative; border: 1px solid red;">
-<canvas id="curves" style="width: 100%; height: 100%; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></canvas>
-</div>
-<button onclick="downloadCanvas()">Download</button>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/js.cookie.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/editabletable.js"></script>
+    <script src="js/moment-with-locales.js"></script>
+    <script src="js/curves.js"></script>
 
 </body>
 </html>
