@@ -157,7 +157,6 @@ function draw () {
             var value = (data.values[i][1]);
             coords.push([monthToX(age), sizeToY(value)]);
         }
-        // console.log(coords);
         curves.drawPath(coords);
         curves.drawText("Courbe de " + data.name + ", " + ageNow.toFixed(0) + " mois", [400, 50]);
     });
@@ -165,16 +164,20 @@ function draw () {
 
 
 function setCookie (data) {
-    console.log("Saving", data);
+    data["version"] = 1;
     Cookies.set('adikiaCurveData', data);
 }
 
 
 function loadFromCookie () {
     var data = Cookies.getJSON('adikiaCurveData');
-    if (data) {
 
-        // console.log("Loading", data);
+    if (data && data.version != 1) {
+        Cookies.remove('adikiaCurveData');
+        data = null;
+    }
+
+    if (data) {
 
         $("#formName").val(data.name);
         $("#formBirthdate").val(data.birthdate);
