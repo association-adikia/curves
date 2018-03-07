@@ -1,3 +1,7 @@
+body {
+    margin: 12px;
+}
+
 #curves-container {
     width: 100%;
     position: relative;

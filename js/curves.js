@@ -150,6 +150,11 @@ function draw () {
     var ageNow = ageMonths(moment(), birthdate);
     var url = "images/hc" + data.gender + ".png";
 
+    if (data.gender == "F") {
+        curves.ctx.strokeStyle = colorg;
+        curves.ctx.fillStyle = colorg;
+    }
+
     curves.drawImage(url, function () {
         var coords = [];
         for (var i = 0; i < data.values.length; i++) {
@@ -158,7 +163,13 @@ function draw () {
             coords.push([monthToX(age), sizeToY(value)]);
         }
         curves.drawPath(coords);
-        curves.drawText("Courbe de " + data.name + ", " + ageNow.toFixed(0) + " mois", [400, 50]);
+        if (data.name && birthdate) {
+            var text = "Courbe de " + data.name;
+            if (ageNow) {
+                text += ", " + ageNow.toFixed(0) + " mois";
+            }
+            curves.drawText(text, [400, 50]);
+        }
     });
 }
 
@@ -195,7 +206,7 @@ function loadFromCookie () {
 function appendRow (date, value) {
     $("#table").append('<tr><td class="date"><input type="text" class="form-control" value="' + date +
                        '" placeholder="01/01/2018" size="8" /></td><td class="value"><input type="text" class="form-control" value="' + value +
-                       '" size="2" placeholder="42" /></td></tr>');
+                       '" size="2" placeholder="36" /></td></tr>');
 }
 
 
