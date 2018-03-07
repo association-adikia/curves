@@ -1,10 +1,27 @@
 <html>
 <head>
+ <meta charset="UTF-8">
 <title>Courbes</title>
 <script src="jquery-3.3.1.min.js"></script>
 <script src="download.js"></script>
 <script src="editabletable.js"></script>
+<script src="moment-with-locales.js"></script>
 <script>
+
+function ageMonths(date, birthDate) {
+    return moment.duration(date.diff(birthDate, "months", true)) / 1;
+}
+
+
+function parseDate(date) {
+    return moment(date, "DD/MM/YYYY");
+}
+
+
+// var name = "";
+// var birthdate = null;
+// var gender = null;
+
 
 var data = "";
 var imgWidth = 2480, imgHeight = 1748;
@@ -22,9 +39,6 @@ function sizeToY(size) {
     return bl[1] + (tr[1] - bl[1]) * ((size - 30) / 30) + 2;
 }
 
-
-// var colorb = "#d2e18c";
-// var colorg = "#fdcd80";
 
 var colorb = "#6D9505";
 var colorg = "#790463";
@@ -49,6 +63,8 @@ function makeHighDpi(canvas, ctx) {
 
 function Curves() {
     var canvas = document.getElementById("curves");
+    canvas.width = 620;
+    canvas.height = 437;
 
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
@@ -59,6 +75,8 @@ function Curves() {
         ctx.lineWidth = 1;
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
+        ctx.font = "16px sans-serif";
+        ctx.textAlign = "center";
 
     }
 
@@ -68,7 +86,7 @@ function Curves() {
 }
 
 
-Curves.prototype.loadImage = function (url, callback) {
+Curves.prototype.drawImage = function (url, callback) {
     var img = new Image();
     var that = this;
     img.onload = function() {
@@ -83,6 +101,12 @@ Curves.prototype.loadImage = function (url, callback) {
         }
     };
     img.src = url;
+};
+
+
+Curves.prototype.drawText = function (text) {
+    var coords = this._rescale(imgWidth / 2, 100);
+    this.ctx.fillText(text, coords[0], coords[1]);
 };
 
 
@@ -124,18 +148,6 @@ Curves.prototype.drawPath = function (path_orig) {
 
 }
 
-function draw() {
-    var curves = new Curves();
-    curves.loadImage("hcb.png", function () {
-        var coords = [monthToX(24), sizeToY(55)];
-        curves.drawPath([bl, coords, tr]);
-    });
-}
-
-$(document).ready(function() {
-    draw();
-});
-
 
 function downloadCanvas() {
     var canvas = document.getElementById("curves");
@@ -143,14 +155,110 @@ function downloadCanvas() {
     download(data, "courbe.png", "image/png");
 }
 
+
+function getValues() {
+    var name = $("#formName").val();
+    var birthdate = parseDate($("#formBirthdate").val());
+    var gender = $("#form input[type='radio']:checked").val();
+
+    var values = [];
+    $("#table tbody tr").each(function () {
+        var date = parseDate($(this).find(".date").html());
+        var value = parseFloat($(this).find(".value").html());
+        var age = ageMonths(date, birthdate);
+        values.push([age, value]);
+    });
+
+    return {"name": name, "birthdate": birthdate, "gender": gender, "values": values};
+}
+
+
+function draw () {
+    var curves = new Curves();
+    var data = getValues();
+    var ageNow = ageMonths(moment(), data.birthdate);
+    var url = "hc" + data.gender + ".png";
+
+    curves.drawImage(url, function () {
+        var coords = [];
+        for (var i = 0; i < data.values.length; i++) {
+            var age = data.values[i][0];
+            var value = data.values[i][1];
+            coords.push([monthToX(age), sizeToY(value)]);
+        }
+        curves.drawPath(coords);
+        curves.drawText("Courbe de " + data.name + ", " + ageNow.toFixed(0) + " mois", [400, 50]);
+    });
+}
+
+
+$(document).ready(function() {
+    $("#table").editableTableWidget();
+
+    $("#table").on("change", function (evt, newValue) {
+        if ($("#table tr:last td:empty").length < 2) {
+            $("#table").append('<tr><td class="date" tabindex="1"></td><td class="value" tabindex="2"></td></tr>');
+        }
+        draw();
+    });
+    draw();
+});
+
+
 </script>
 <style>
 #curves {
     border: 1px solid black;
 }
+
+#table tbody tr {
+    height: 30px;
+}
+
+#table tbody td {
+    border: 1px solid black;
+}
 </style>
 </head>
 <body>
+
+
+<form id="form" onsubmit="return false;">
+    <input type="text" id="formName" name="name" placeholder="pr&eacute;nom" />
+    <input type="text" id="formBirthdate" name="birthdate" placeholder="01/01/2018" size="12" />
+    <input type="radio" id="formGenderM" name="gender" value="M" id="genderM" checked />
+    <label for="genderM">gar&ccedil;on</label>
+    <input type="radio" id="formGenderF" name="gender" value="F" id="genderF" />
+    <label for="genderF">fille</label>
+</form>
+
+
+<table id="table">
+    <thead>
+        <tr>
+            <th>date</th>
+            <th>PC (cm)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="date">05/11/2015</td>
+            <td class="value">36</td>
+        </tr>
+        <tr>
+            <td class="date">05/12/2015</td>
+            <td class="value">38</td>
+        </tr>
+        <tr>
+            <td class="date">05/04/2016</td>
+            <td class="value">46</td>
+        </tr>
+        <tr>
+            <td class="date"></td>
+            <td class="value"></td>
+        </tr>
+    </tbody>
+</table>
 
 <canvas id="curves" width="620" height="437"></canvas>
 <button onclick="downloadCanvas()">Download</button>
