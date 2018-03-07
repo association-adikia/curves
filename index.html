@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>Courbes</title>
+<script src="jquery-3.3.1.min.js"></script>
+<script src="download.js"></script>
+<script src="editabletable.js"></script>
+<script>
+
+var data = "";
+
+function draw() {
+    var canvas = document.getElementById("curves");
+    if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 5;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        // ctx.fillRect(25, 25, 100, 100);
+        // ctx.clearRect(45, 45, 60, 60);
+        // ctx.strokeRect(50, 50, 50, 50);
+
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.lineTo(150, 150);
+        ctx.lineTo(200, 50);
+        ctx.lineTo(250, 300);
+        // ctx.stroke();
+        // ctx.moveTo(50, 50);
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc(100, 100, 10, 0, 2 * Math.PI, false);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(50, 50, 10, 0, 2 * Math.PI, false);
+        ctx.fill();
+
+        ctx.closePath();
+
+        data = canvas.toDataURL();
+
+    }
+}
+
+$(document).ready(function() {
+    draw();
+});
+
+function downloadCanvas() {
+    var canvas = document.getElementById("curves");
+
+    download(data, "courbe.png", "image/png");
+}
+
+</script>
+<style>
+#curves {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<canvas id="curves" width="640" height="480"></canvas>
+<button onclick="downloadCanvas()">Download</button>
+
+</body>
+</html>
