@@ -8,10 +8,29 @@
 
 var data = "";
 
+
+function make_high_dpi(canvas, ctx) {
+    var dpr = window.devicePixelRatio || 1;
+    var bsr = ctx.webkitBackingStorePixelRatio ||
+              ctx.mozBackingStorePixelRatio ||
+              ctx.msBackingStorePixelRatio ||
+              ctx.oBackingStorePixelRatio ||
+              ctx.backingStorePixelRatio || 1;
+    var pixel_ratio = dpr / bsr;
+    canvas.style.width  = canvas.width  + "px";
+    canvas.style.height = canvas.height + "px";
+    canvas.width  *= pixel_ratio;
+    canvas.height *= pixel_ratio;
+    ctx.scale(pixel_ratio, pixel_ratio);
+}
+
+
 function draw() {
     var canvas = document.getElementById("curves");
+
     if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
+        make_high_dpi(canvas, ctx);
 
         ctx.strokeStyle = "black";
         ctx.lineWidth = 5;
