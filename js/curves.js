@@ -9,7 +9,6 @@ function parseDate(date) {
 }
 
 
-var imgData = "";
 var imgWidth = 2480, imgHeight = 1748;
 
 var bl = [252, 1415];
@@ -62,7 +61,6 @@ Curves.prototype.drawImage = function (url, callback) {
 
         if (callback !== undefined) {
             callback();
-            imgData = canvas.toDataURL();
         }
     };
     img.src = url;
@@ -118,7 +116,9 @@ Curves.prototype.drawPath = function (path_orig) {
 
 function downloadCanvas() {
     var canvas = document.getElementById("curves");
-    download(imgData, "courbe.png", "image/png");
+    canvas.toBlob(function(blob) {
+        saveAs(blob, "courbe.png");
+    });
 }
 
 
