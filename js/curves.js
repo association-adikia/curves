@@ -117,7 +117,7 @@ Curves.prototype.drawPath = function (path_orig) {
 function downloadCanvas() {
     var canvas = document.getElementById("curves");
     canvas.toBlob(function(blob) {
-        saveAs(blob, "courbe.png");
+        saveAs(blob, "courbe.png", {"type": "image/png"});
     });
 }
 
